@@ -1,92 +1,158 @@
+
 <!DOCTYPE html>
 <html lang="en">
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weather App</title>
-    <link rel="stylesheet" href="style.css">
+
+    <title>SkyCast | Weather Dashboard</title>
+    <meta name="theme-color" content="#10182f">
+    <meta name="description" content="Check live weather conditions for any city.">
+
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600;700&family=Outfit:wght@400;500;600;700&display=swap" rel="stylesheet">
+
     <link rel="stylesheet"
-         href="https://unpkg.com/boxicons@latest/css/boxicons.min.css">
-    
+          href="https://unpkg.com/boxicons@2.1.4/css/boxicons.min.css">
+    <link rel="stylesheet" href="style.css">
 </head>
+
 <body>
-<div class="card">
-    <div class="search">
-        <input type="text" placeholder="Enter the city" spellcheck="false">
-        <button><i class='bx  bx-search'  ></i>  </button>
-    </div>
-    <div class="error">
-        <p>Invalid City Name</p>
-    </div>
-    <div class="Weather">
-        <img src="image/cloudy-removebg-preview.png" class="cimg">
-        <h1 class="temp">28°c</h1>
-        <h2 class="place">Chennai</h2>
-        <div class="details">
-                <div class="info">
-                <img src="image/humidity-removebg-preview.png">
+    <div class="ambient ambient-one"></div>
+    <div class="ambient ambient-two"></div>
+
+    <main class="app">
+        <header class="topbar">
+            <a href="#" class="brand" aria-label="SkyCast home">
+                <span class="brand-icon"><i class="bx bx-cloud"></i></span>
+                <span>sky<span class="brand-accent">cast</span></span>
+            </a>
+
+            <div class="live-label">
+                <span class="live-dot"></span>
+                LIVE WEATHER
+            </div>
+        </header>
+
+        <section class="intro">
+            <p class="eyebrow">YOUR PERSONAL WEATHER STATION</p>
+            <h1>Feel the <span>weather.</span></h1>
+            <p class="intro-text">
+                A little sunshine, a little rain. Know what's outside.
+            </p>
+        </section>
+
+        <section class="search-panel" aria-label="Search weather">
+            <i class="bx bx-search search-icon"></i>
+
+            <input
+                id="cityInput"
+                type="search"
+                placeholder="Search a city... e.g. Chennai"
+                autocomplete="off"
+                aria-label="City name"
+            >
+
+            <button id="searchBtn" class="search-btn" type="button">
+                Search <i class="bx bx-right-arrow-alt"></i>
+            </button>
+        </section>
+
+        <button id="locationBtn" class="location-btn" type="button">
+            <i class="bx bx-current-location"></i>
+            Use my current location
+        </button>
+
+        <p id="statusMessage" class="status-message" role="status"
+           aria-live="polite"></p>
+
+        <section id="weatherCard" class="weather-card" aria-label="Weather information">
+            <div class="weather-top">
                 <div>
-                <p class="humidity">80%</p>
-                <p>Humidity</p>
+                    <p class="card-label">CURRENT WEATHER</p>
+                    <h2 id="cityName">Chennai</h2>
+                    <p id="countryName" class="country">Tamil Nadu, India</p>
+                    <p id="localDate" class="local-date">Check the latest conditions</p>
+                </div>
+
+                <div class="weather-icon-wrap">
+                    <img id="weatherIcon"
+                         src="https://openweathermap.org/img/wn/01d@2x.png"
+                         alt="Weather condition"
+                         
+                    >
                 </div>
             </div>
-                <div class="info">
-                <img src="image/speed-removebg-preview.png">
-                <div>
-                <p class="wind">15 Km/h</p>
-                <p>Wind Speed</p>
+
+            <div class="temperature-section">
+                <div class="temperature">
+                    <span id="temperature">--</span><span class="degree">°</span>
                 </div>
-               </div>
-        </div>
-    </div>
-</div>
-<script>
-    const apikey="39d6dee590d13d30326f7815aaaeeaed";
-    const apiurl="https://api.openweathermap.org/data/2.5/weather?units=metric&q=";
-    const searchbox = document.querySelector(".search input");
-    const searchbtn = document.querySelector(".search button");
-    const weathericon =document.querySelector(".cimg");
-    async function checkweather(place) {
-        const response=await fetch (apiurl + place +`&appid=${apikey}`);
-        if(response.status== 404)
-    {
-        document.querySelector(".error").style.display="block";
-        document.querySelector(".Weather").style.display="none";
-    }
-    else
-    {
 
-        var data=await response.json();
-        
-        document.querySelector(".place").innerHTML = data.name ;
-        document.querySelector(".temp").innerHTML = Math.round(data.main.temp) + "°c" ;
-        document.querySelector(".humidity").innerHTML = data.main.humidity + "%";
-        document.querySelector(".wind").innerHTML = data.wind.speed + "Km/h";
-    
-        if(data.weather[0].main == "Clouds"){
-             weathericon.src="image/cloudy-removebg-preview (1) copy.png";
-        }
-        else if(data.weather[0].main == "Clear"){
-             weathericon.src="image/sun-removebg-preview.png";
-        }
-        else if(data.weather[0].main == "Rain"){
-             weathericon.src="image/rain-removebg-preview (1).png";
-        }
-        else if(data.weather[0].main == "Drizzle"){
-             weathericon.src="image/rain-removebg-preview (1).png ";
-        }
-        else if(data.weather[0].main == "Mist"){
-             weathericon.src=" image/cloudy-removebg-preview.png";
-        }
-        document.querySelector(".Weather").style.display="block";
-        document.querySelector(".error").style.display="none";
-    }
+                <div class="temperature-info">
+                    <h3 id="condition">Waiting for weather</h3>
+                    <p>Feels like <strong id="feelsLike">--°C</strong></p>
+                    <p id="tempRange">Live conditions</p>
+                </div>
+            </div>
 
-    }
-    searchbtn.addEventListener("click",()=>{
-        checkweather(searchbox.value);
-    })
-  
-</script>
+            <div class="weather-divider"></div>
+
+            <div class="details-grid">
+                <article class="detail-item">
+                    <div class="detail-icon humidity-icon">
+                        <i class="bx bx-droplet"></i>
+                    </div>
+                    <div>
+                        <p class="detail-label">Humidity</p>
+                        <h3 id="humidity">--%</h3>
+                    </div>
+                </article>
+
+                <article class="detail-item">
+                    <div class="detail-icon wind-icon">
+                        <i class="bx bx-wind"></i>
+                    </div>
+                    <div>
+                        <p class="detail-label">Wind speed</p>
+                        <h3 id="wind">-- km/h</h3>
+                    </div>
+                </article>
+
+                <article class="detail-item">
+                    <div class="detail-icon pressure-icon">
+                        <i class="bx bx-tachometer"></i>
+                    </div>
+                    <div>
+                        <p class="detail-label">Pressure</p>
+                        <h3 id="pressure">-- hPa</h3>
+                    </div>
+                </article>
+
+                <article class="detail-item">
+                    <div class="detail-icon visibility-icon">
+                        <i class="bx bx-show"></i>
+                    </div>
+                    <div>
+                        <p class="detail-label">Visibility</p>
+                        <h3 id="visibility">-- km</h3>
+                    </div>
+                </article>
+            </div>
+
+            <div class="weather-footer">
+                <span><i class="bx bx-check-circle"></i> Live weather data</span>
+                <span id="updatedAt">Waiting for update</span>
+            </div>
+        </section>
+
+        <footer class="footer">
+            <p>Made with <span>♥</span> for weather lovers</p>
+            <p>Powered by OpenWeather</p>
+        </footer>
+    </main>
+
+    <script src="script.js"></script>
 </body>
 </html>
